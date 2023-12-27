@@ -1,9 +1,11 @@
 import expressAsyncHandler from "express-async-handler"
 import sgMail from "@sendgrid/mail"
 import crypto from "crypto"
+import path from "path"
 import User from "../models/User.js"
 import generateToken from "../config/generateToken.js"
 import validateMongodbId from "../middlewares/errors/validateMongoDbId.js";
+import cloudinaryImageUpload from "../config/cloudinary.js"
 
 sgMail.setApiKey('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');
 console.log(process.env.SENDGRID_API_KEY);
@@ -254,6 +256,18 @@ const resetPassword = expressAsyncHandler(async (req, res) => {
     res.json(user);
 });
 
+const uploadProfilePhoto = expressAsyncHandler(async (req, res) => {
+    const { _id } = req.user;
+
+    const localPath = `public/images/profile/${req.file.filename}`;
+    const image = await cloudinaryImageUpload(localPath);
+
+    const user = await User.findByIdAndUpdate(_id, {
+        profilePhoto: image?.url,
+    }, { new: true });
+    res.json(user);
+});
+
 export {
     register,
     login,
@@ -270,5 +284,6 @@ export {
     generateVerificationToken,
     verifyAccount,
     generatePasswordToken,
-    resetPassword
+    resetPassword,
+    uploadProfilePhoto
 }
