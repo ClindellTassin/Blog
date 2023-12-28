@@ -89,12 +89,8 @@ const userSchema = new Schema({
         default: false,
     },
 }, {
-    toJSON: {
-        virtuals: true,
-    },
-    toObject: {
-        virtuals: true,
-    },
+    toJSON: { virtuals: true, },
+    toObject: { virtuals: true, },
     timestamps: true,
 });
 
@@ -128,6 +124,13 @@ userSchema.methods.createPasswordToken = async function () {
     this.passwordResetExpires = Date.now() + 30 * 60 * 1000;
     return resetToken;
 };
+
+// populate single user posts
+userSchema.virtual('posts', {
+    ref: 'Post',
+    foreignField: 'user',
+    localField: '_id'
+});
 
 const User = model('User', userSchema);
 

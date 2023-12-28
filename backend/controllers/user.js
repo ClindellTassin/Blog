@@ -1,7 +1,7 @@
 import expressAsyncHandler from "express-async-handler"
 import sgMail from "@sendgrid/mail"
 import crypto from "crypto"
-import path from "path"
+import fs from "fs"
 import User from "../models/User.js"
 import generateToken from "../config/generateToken.js"
 import validateMongodbId from "../middlewares/errors/validateMongoDbId.js";
@@ -85,7 +85,7 @@ const getProfile = expressAsyncHandler(async (req, res) => {
     validateMongodbId(id);
 
     try {
-        const profile = User.findById(id);
+        const profile = User.findById(id).populate('posts');
         res.json(profile);
     } catch (error) {
         res.json(error);
@@ -266,6 +266,8 @@ const uploadProfilePhoto = expressAsyncHandler(async (req, res) => {
         profilePhoto: image?.url,
     }, { new: true });
     res.json(user);
+
+    fs.unlinkSync(localPath);
 });
 
 export {

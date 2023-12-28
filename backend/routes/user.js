@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { block, deleteUser, fetchUser, fetchUsers, follow, generatePasswordToken, generateVerificationToken, getProfile, login, register, resetPassword, unblock, unfollow, updatePassword, updateProfile, uploadProfilePhoto, verifyAccount } from "../controllers/user.js";
 import authMiddleware from "../middlewares/auth/auth.js";
-import { profilePhotoResize, profilePhotoUpload } from "../middlewares/upload/profilePhotoUpload.js";
+import { profilePhotoResize, photoUpload } from "../middlewares/upload/photoUpload.js";
 
 const userRoutes = Router();
 
@@ -14,7 +14,7 @@ userRoutes.get('/', fetchUsers);
 userRoutes.post('/email-token', authMiddleware, generateVerificationToken);
 userRoutes.put('/verify-account', authMiddleware, verifyAccount);
 userRoutes.get('/profile/:id', authMiddleware, getProfile);
-userRoutes.put('/profile', authMiddleware, profilePhotoUpload.single("image"), profilePhotoResize, uploadProfilePhoto);
+userRoutes.put('/profile', authMiddleware, photoUpload.single("image"), profilePhotoResize, uploadProfilePhoto);
 userRoutes.put('/:id', authMiddleware, updateProfile);
 userRoutes.put('/password', authMiddleware, updatePassword);
 userRoutes.post('/password-token', generatePasswordToken);
@@ -25,6 +25,6 @@ userRoutes.put('/block/:id', authMiddleware, block);
 userRoutes.put('/unblock/:id', authMiddleware, unblock);
 userRoutes.delete('/:id', authMiddleware, deleteUser);
 
-// require authorization
+// require admin
 
 export default userRoutes;
