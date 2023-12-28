@@ -84,7 +84,7 @@ const deletePost = expressAsyncHandler(async (req, res) => {
     validateMongodbId(id);
 
     try {
-        const post = await Post.findOneAndDelete(id);
+        const post = await Post.findByIdAndDelete(id);
         res.json(post);
     } catch (error) {
         res.json(error);

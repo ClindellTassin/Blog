@@ -7,8 +7,7 @@ import generateToken from "../config/generateToken.js"
 import validateMongodbId from "../middlewares/errors/validateMongoDbId.js";
 import cloudinaryImageUpload from "../config/cloudinary.js"
 
-sgMail.setApiKey('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');
-console.log(process.env.SENDGRID_API_KEY);
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const register = expressAsyncHandler(async (req, res) => {
     const userExists = await User.findOne({ email: req?.body?.email });
