@@ -4,6 +4,7 @@ import connect from "./config/dbConnect.js";
 import userRoutes from "./routes/user.js";
 import { errorHandler, notFound } from "./middlewares/errors/errorHandler.js";
 import postRoutes from "./routes/post.js";
+import commentRoutes from "./routes/comment.js"
 
 config();
 connect();
@@ -13,6 +14,7 @@ app.use(express.json());
 
 app.use('/api/users', userRoutes);
 app.use('/api/posts', postRoutes);
+app.use('/api/comments', commentRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
